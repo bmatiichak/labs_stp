@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="en">
   <head>
-    <title>Blog</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="UTF-8" />
+    <title>Публікації</title>
   </head>
   <body>
     {% load static %}
@@ -14,24 +14,11 @@
     </nav>
     <main>
       <section>
-        <div class="categories-wrapper">
-          <h3>Категорії:</h3>
-          {% if categories %}
-          <div class="category">
-            {% for item in categories %}
-            <a href="{{ item.get_absolute_url }}">
-              <h4>{{ item.category }}</h4>
-            </a>
-            {% endfor %}
-          </div>
-          {% endif %}
-        </div>
-      </section>
-      <section>
-        {% if articles %}
-        <h3>Цікаві публікації:</h3>
+        {% if category %}
+        <h1>Категорія: {{ category }}</h1>
+        {% endif %}
         <div class="articles-wrapper">
-          {% for item in articles %}
+          {% for item in items %}
           <div class="article">
             <a href="{{ item.get_absolute_url }}">
               <h4>{{ item.title }}</h4>
@@ -40,16 +27,18 @@
             <p>
               {{ item.description|safe|escape|striptags|truncatewords_html:32 }}
             </p>
+            {% if item.images.all %} {% for element in item.images.all %}
+            <div class="container-image">
+              <img class="img" src="{{ element.image.url }}" alt="" />
+            </div>
+            {% endfor %} {% endif %}
+            <div class="clearfix"></div>
           </div>
           {% endfor %}
         </div>
-        {% endif %}
       </section>
-
-      <a class="btn showall" href="{% url 'articles-list' %}">
-        Дивитись всі публікації
-      </a>
     </main>
+
     <link rel="stylesheet" href="{% static 'style.css' %}" />
   </body>
 </html>
