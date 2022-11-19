@@ -1,55 +1,37 @@
-<!DOCTYPE html>
-<html lang="uk">
-  <head>
-    <title>Blog</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  </head>
-  <body>
-    {% load static %}
-    <nav>
-      <ul>
-        <li><a href="/">Головна</a></li>
-        <li><a href="{% url 'articles-list' %}">Публікації</a></li>
-      </ul>
-    </nav>
-    <main>
-      <section>
-        <div class="categories-wrapper">
-          <h3>Категорії:</h3>
-          {% if categories %}
-          <div class="category">
-            {% for item in categories %}
-            <a href="{{ item.get_absolute_url }}">
-              <h4>{{ item.category }}</h4>
-            </a>
-            {% endfor %}
-          </div>
-          {% endif %}
-        </div>
-      </section>
-      <section>
-        {% if articles %}
-        <h3>Цікаві публікації:</h3>
-        <div class="articles-wrapper">
-          {% for item in articles %}
-          <div class="article">
-            <a href="{{ item.get_absolute_url }}">
-              <h4>{{ item.title }}</h4>
-            </a>
-            <h5>{{ item.pub_date|date:"j E Y"|safe|linebreaks }}</h5>
-            <p>
-              {{ item.description|safe|escape|striptags|truncatewords_html:32 }}
-            </p>
-          </div>
-          {% endfor %}
-        </div>
-        {% endif %}
-      </section>
+{% extends "base.html" %} {% load static %} {% block content %} {% spaceless %}
 
-      <a class="btn showall" href="{% url 'articles-list' %}">
-        Дивитись всі публікації
+<section>
+  <div class="categories-wrapper">
+    <h3>Категорії:</h3>
+    {% if categories %}
+    <div class="category">
+      {% for item in categories %}
+      <a href="{{ item.get_absolute_url }}">
+        <h4>{{ item.category }}</h4>
       </a>
-    </main>
-    <link rel="stylesheet" href="{% static 'style.css' %}" />
-  </body>
-</html>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+</section>
+<section>
+  {% if articles %}
+  <h3>Цікаві публікації:</h3>
+  <div class="articles-wrapper">
+    {% for item in articles %}
+    <div class="article">
+      <a href="{{ item.get_absolute_url }}">
+        <h4>{{ item.title }}</h4>
+      </a>
+      <h6>{{ item.pub_date|date:"j E Y"|safe|linebreaks }}</h6>
+      <p>{{ item.description|safe|escape|striptags|truncatewords_html:32 }}</p>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+</section>
+
+<a class="btn btn-dark" href="{% url 'articles-list' %}">
+  Дивитись всі публікації
+</a>
+{% endspaceless %} {% endblock %}
